@@ -17,7 +17,7 @@
     <style name="drawee">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="actualImageScaleType">fitCenter</item>
+        <item name="actualImageScaleType">none</item>
         <item name="failureImage">@color/colorAccent</item>
     </style>
 

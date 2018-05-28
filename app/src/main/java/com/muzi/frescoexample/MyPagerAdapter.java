@@ -17,9 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.interfaces.DraweeController;
-import com.muzi.frescoexample.zoomable.DoubleTapGestureListener;
 import com.muzi.frescoexample.zoomable.ZoomableDraweeView;
 
 
@@ -53,23 +50,27 @@ class MyPagerAdapter extends PagerAdapter {
     }
 
     @Override
-    public Object instantiateItem(ViewGroup container, int position) {
-        FrameLayout page = (FrameLayout) container.getChildAt(position);
+    public Object instantiateItem(ViewGroup container, final int position) {
+        final ViewGroup page = (ViewGroup) container.getChildAt(position);
         if (page == null) {
             return null;
         }
-        ZoomableDraweeView zoomableDraweeView =
-                (ZoomableDraweeView) page.findViewById(R.id.zoomableView);
-        zoomableDraweeView.setAllowTouchInterceptionWhileZoomed(mAllowSwipingWhileZoomed);
-        // needed for double tap to zoom
-        zoomableDraweeView.setIsLongpressEnabled(false);
-        zoomableDraweeView.setTapListener(new DoubleTapGestureListener(zoomableDraweeView));
-        DraweeController controller = Fresco.newDraweeControllerBuilder()
-                .setUri(SAMPLE_URIS[position % SAMPLE_URIS.length])
-                .setCallerContext("ZoomableApp-MyPagerAdapter")
-                .build();
-        zoomableDraweeView.setController(controller);
+        final ZoomableDraweeView zoomableDraweeView = page.findViewById(R.id.zoomableView);
+        ImageLoaderUtils.loadImage(zoomableDraweeView, SAMPLE_URIS[position % SAMPLE_URIS.length], true);
         page.requestLayout();
+
+        page.findViewById(R.id.btnRL).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                zoomableDraweeView.openRotate(-90);
+            }
+        });
+        page.findViewById(R.id.btnRR).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                zoomableDraweeView.openRotate(90);
+            }
+        });
         return page;
     }
 
